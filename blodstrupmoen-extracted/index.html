@@ -1,0 +1,2357 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blostrupmoen — Kunnskap redder liv</title>
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="icon" href="assets/favicon-192.png" sizes="192x192" type="image/png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --orange: #E97410;
+    --orange-deep: #C85F08;
+    --orange-soft: #FBE7D2;
+    --cream: #FAF1E6;
+    --cream-deep: #F4E4CE;
+    --ink: #141311;
+    --ink-2: #3A3733;
+    --ink-3: #6B6661;
+    --rule: #E8E1D5;
+    --bg: #FDFBF6;
+    --white: #ffffff;
+    --red: #C33027;
+    --shadow: 0 1px 2px rgba(20,19,17,.04), 0 12px 32px -12px rgba(20,19,17,.12);
+    --shadow-lg: 0 1px 2px rgba(20,19,17,.05), 0 30px 60px -20px rgba(20,19,17,.18);
+    /* Glass surfaces */
+    --glass-white: rgba(255,255,255,0.72);
+    --glass-white-heavy: rgba(255,255,255,0.92);
+    --glass-bg: rgba(253,251,246,0.92);
+    --overlay-dark: rgba(20,19,17,0.45);
+    --overlay-dark-light: rgba(20,19,17,0.08);
+    /* AED / dark section palette */
+    --aed-text: #FBF5EA;
+    --aed-accent: #F9A76B;
+    --aed-surface: #1f1d1a;
+    /* Radius scale */
+    --radius-pill: 999px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    /* Section spacing */
+    --space-section: 112px;
+    --space-section-sm: 64px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  .serif { font-family: 'Source Serif 4', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 1.5px;
+    background: var(--orange);
+    display: inline-block;
+  }
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid transparent;
+    transition: all .18s ease;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--white);
+    animation: cta-glow 2.4s ease 0.6s 1 forwards;
+  }
+  .btn-primary:hover { background: var(--orange); box-shadow: none; }
+  @keyframes cta-glow {
+    0%   { box-shadow: 0 0 0 0 rgba(195,48,39,0); }
+    30%  { box-shadow: 0 0 0 4px rgba(195,48,39,0.55), 0 0 22px rgba(195,48,39,0.28); }
+    70%  { box-shadow: 0 0 0 4px rgba(195,48,39,0.35), 0 0 14px rgba(195,48,39,0.15); }
+    100% { box-shadow: 0 0 0 0 rgba(195,48,39,0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn-primary { animation: none; } }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .btn-ghost:hover { background: var(--ink); color: var(--white); }
+  .btn-orange {
+    background: var(--orange);
+    color: var(--white);
+  }
+  .btn-orange:hover { background: var(--orange-deep); }
+  .arrow { transition: transform .2s ease; }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* ===== NAV ===== */
+  /* Shared frosted-glass material */
+  .pill-glass {
+    background: var(--glass-white);
+    backdrop-filter: saturate(1.8) blur(18px);
+    -webkit-backdrop-filter: saturate(1.8) blur(18px);
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 2px 16px var(--overlay-dark-light);
+  }
+
+  .nav {
+    position: fixed;
+    top: 16px;
+    left: 0; right: 0;
+    z-index: 100;
+    padding: 0 20px;
+    pointer-events: none;
+  }
+  .nav-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .nav-bar > * { pointer-events: auto; }
+
+  /* Brand pill (left) */
+  .brand-pill {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    border-radius: var(--radius-pill);
+    padding: 6px 16px 6px 6px;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    transition: padding 0.4s ease;
+  }
+  .brand-icon {
+    width: 36px; height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 50%;
+  }
+  .brand-name {
+    max-width: 180px;
+    opacity: 1;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    margin-left: 10px;
+    transition: max-width 0.4s ease, opacity 0.3s ease, margin-left 0.4s ease;
+  }
+  .is-scrolled .brand-name {
+    max-width: 0;
+    opacity: 0;
+    margin-left: 0;
+  }
+  .is-scrolled .brand-pill {
+    padding: 6px;
+  }
+
+  /* Nav center wrapper */
+  .nav-center {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Nav links pill (center, desktop) */
+  .nav-pill {
+    display: flex;
+    gap: 2px;
+    border-radius: var(--radius-pill);
+    padding: 6px;
+  }
+  .nav-link {
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+  }
+  .nav-link:hover,
+  .nav-link.is-active {
+    background: var(--orange-soft);
+    color: var(--orange-deep);
+  }
+
+  /* Mobile center CTA (hidden on desktop, fades in on scroll+mobile) */
+  .nav-cta-center {
+    display: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease 0.15s;
+  }
+
+  /* Right side */
+  .nav-right {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-cta-desktop {
+    border-radius: var(--radius-pill);
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+    pointer-events: auto;
+  }
+  .nav-cta-desktop:hover { background: var(--ink-2); color: #fff; }
+
+  /* Burger circle */
+  .burger-pill {
+    display: none;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  .burger-pill span {
+    display: block;
+    width: 18px; height: 1.5px;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+  .burger-pill.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .burger-pill.is-open span:nth-child(2) { opacity: 0; }
+  .burger-pill.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile menu dropdown */
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    padding: 8px;
+    margin-top: 8px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+  }
+  .mobile-menu.is-open {
+    max-height: 400px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .mob-link {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .mob-link:hover,
+  .mob-link.is-active { background: var(--orange-soft); color: var(--orange-deep); }
+  .mob-link--cta {
+    margin-top: 4px;
+    background: var(--ink);
+    color: #fff;
+    text-align: center;
+    border-radius: var(--radius-pill);
+  }
+  .mob-link--cta:hover { background: var(--ink-2); color: #fff; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .nav-pill, .nav-cta-desktop { display: none; }
+    .burger-pill { display: flex; }
+    .nav-cta-center { display: flex; }
+    .is-scrolled .nav-cta-center {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  @media (max-width: 480px) {
+    .nav { top: 10px; padding: 0 12px; }
+    .nav-link { padding: 7px 11px; font-size: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .brand-name, .brand-pill, .nav-cta-center { transition: none; }
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    padding: 120px 0 96px;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .hero h1 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(44px, 5.6vw, 78px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin: 20px 0 24px;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .hero-lede {
+    color: var(--ink-2);
+    max-width: 52ch;
+    line-height: 1.55;
+    margin-bottom: 36px;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    max-width: 560px;
+  }
+  .hero-meta-item .num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 34px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .hero-meta-item .lbl {
+    font-size: 14px;
+    color: var(--ink-3);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+
+  /* Hero visual */
+  .hero-visual {
+    position: relative;
+    aspect-ratio: 4/5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(180deg, #F6E9D3 0%, #EED9B8 100%);
+    box-shadow: var(--shadow-lg);
+  }
+  .hero-visual img.primary {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+  }
+  .hero-badge {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    background: var(--glass-white-heavy);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 18px 22px;
+    max-width: 280px;
+    box-shadow: var(--shadow);
+  }
+  .hero-badge .tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+  }
+  .hero-badge .copy {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    margin-top: 8px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .floating-logo {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    width: 68px;
+    height: 68px;
+    background: var(--glass-white-heavy);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    backdrop-filter: blur(6px);
+  }
+  .floating-logo img { width: 42px; height: 42px; object-fit: contain; }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero { padding: 40px 0 64px; }
+  }
+
+  /* ===== TICKER / partners ===== */
+  .partners {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 0;
+    background: var(--cream);
+  }
+  .partners-row {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .partners-label {
+    font-size: 14px;
+    color: var(--ink-3);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .partners-track-wrap {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+  .partner-logos {
+    display: flex;
+    gap: 56px;
+    align-items: center;
+    width: max-content;
+    animation: marquee-scroll 28s linear infinite;
+  }
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .partner-logos { animation: none; }
+  }
+  .plogo-img {
+    height: 30px;
+    width: auto;
+    opacity: 0.6;
+    filter: grayscale(1);
+    flex-shrink: 0;
+    transition: opacity .25s, filter .25s;
+  }
+  .plogo-img:hover { opacity: 1; filter: none; }
+  img[src*="porsche"] { max-width: 120px; }
+  .plogo {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 500;
+    font-size: 22px;
+    flex-shrink: 0;
+    color: var(--ink-2);
+    letter-spacing: -0.01em;
+    opacity: .75;
+  }
+  .plogo.sans { font-family: 'Manrope', sans-serif; font-weight: 700; letter-spacing: 0.02em; }
+  .plogo.allcaps { text-transform: uppercase; letter-spacing: 0.18em; font-size: 14px; font-weight: 600; }
+
+  /* ===== SECTION BASE ===== */
+  section { padding: var(--space-section) 0; }
+  .section-head {
+    max-width: 780px;
+    margin-bottom: var(--space-section-sm);
+  }
+  .section-head h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 500;
+    font-size: clamp(32px, 3.6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 16px 0 16px;
+  }
+  .section-head p {
+    color: var(--ink-2);
+    max-width: 62ch;
+  }
+
+  /* ===== STORY ===== */
+  .story { background: var(--cream); }
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .story-pull {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(28px, 2.6vw, 36px);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .story-pull em { color: var(--orange); font-style: italic; }
+  .story-body {
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+  .story-body p + p { margin-top: 16px; }
+  .founder-card {
+    margin-top: 32px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+  .founder-av {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+    display: grid; place-items: center;
+    color: white; font-weight: 700;
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+  }
+  .founder-card .name { font-weight: 600; }
+  .founder-card .role { font-size: 14px; color: var(--ink-3); }
+
+  @media (max-width: 900px) { .story-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  /* ===== SERVICES ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .svc {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: 28px 26px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: all .25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .svc:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+  .svc-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--orange);
+    font-weight: 500;
+    font-style: italic;
+  }
+  .svc h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.15;
+    margin: 4px 0 0;
+    letter-spacing: -0.015em;
+  }
+  .svc p {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .svc-icon {
+    width: 48px; height: 48px;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    display: grid; place-items: center;
+    color: var(--orange-deep);
+  }
+  .svc-link {
+    margin-top: auto;
+    padding-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .svc-link:hover { color: var(--orange); }
+
+  @media (max-width: 1080px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .services-grid { grid-template-columns: 1fr; } }
+
+  /* ===== AED feature ===== */
+  .aed { background: var(--ink); color: #EDE7DB; padding: 120px 0; }
+  .aed .eyebrow { color: var(--aed-accent); }
+  .aed .eyebrow::before { background: var(--aed-accent); }
+  .aed-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .aed h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 500;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    margin: 18px 0 20px;
+    color: var(--aed-text);
+  }
+  .aed h2 em { font-style: italic; color: var(--aed-accent); }
+  .aed-lede {
+    opacity: .82;
+    max-width: 52ch;
+    margin-bottom: 32px;
+  }
+  .aed-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    display: grid;
+    gap: 16px;
+  }
+  .aed-list li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    align-items: start;
+    line-height: 1.5;
+  }
+  .aed-list .bullet {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--aed-accent);
+    display: grid; place-items: center;
+    color: var(--aed-accent);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .aed-list b { color: var(--aed-text); font-weight: 600; }
+  .aed-list span.dim { opacity: .75; }
+
+  .aed-visual {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background: var(--aed-surface);
+  }
+  .aed-visual img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .aed-stat {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(12px);
+    color: white;
+    padding: 18px 22px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .aed-stat .num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+  .aed-stat .lbl { font-size: 12px; opacity: .8; line-height: 1.3; }
+  @media (max-width: 900px) { .aed-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* ===== EQUIPMENT ===== */
+  .equipment { background: var(--bg); }
+  .eq-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 220px;
+    gap: 16px;
+  }
+  .eq {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--cream);
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    transition: all .25s ease;
+    border: 1px solid var(--rule);
+  }
+  .eq:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .eq-img {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .eq-img img {
+    max-width: 75%;
+    max-height: 75%;
+    object-fit: contain;
+    transition: transform .4s ease;
+  }
+  .eq:hover .eq-img img { transform: scale(1.05); }
+  .eq-label {
+    position: relative;
+    z-index: 2;
+    background: var(--glass-bg);
+    backdrop-filter: blur(6px);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .eq-label small { display: block; font-weight: 500; color: var(--ink-3); font-size: 12px; margin-top: 2px; }
+  .stock-badge {
+    position: absolute; top: 12px; left: 12px; z-index: 3;
+    background: var(--glass-white-heavy);
+    border: 1px solid rgba(34,170,68,0.22);
+    border-radius: var(--radius-pill);
+    padding: 4px 10px 4px 7px;
+    font-size: 12px; font-weight: 600; color: #1a7a30;
+    display: inline-flex; align-items: center; gap: 5px;
+    backdrop-filter: blur(4px);
+  }
+  .stock-dot { width: 7px; height: 7px; border-radius: 50%; background: #22aa44; flex-shrink: 0; }
+
+  .eq-1 { grid-column: span 3; grid-row: span 2; }
+  .eq-2 { grid-column: span 3; }
+  .eq-3 { grid-column: span 2; }
+  .eq-4 { grid-column: span 1; }
+  .eq-5 { grid-column: span 2; }
+  .eq-6 { grid-column: span 2; }
+  .eq-7 { grid-column: span 2; }
+
+  .eq-1 { background: linear-gradient(155deg, #FDF3E3 0%, #F4E0C0 100%); }
+  .eq-2 { background: #F6ECDA; }
+
+  @media (max-width: 900px) {
+    .eq-grid { grid-template-columns: repeat(2,1fr); grid-auto-rows: 180px; }
+    .eq-1, .eq-2, .eq-3, .eq-4, .eq-5, .eq-6, .eq-7 { grid-column: span 1; grid-row: span 1; }
+    .eq-1 { grid-column: span 2; }
+  }
+
+  /* ===== STATS BAND ===== */
+  .stats {
+    background: var(--orange);
+    color: white;
+    padding: 80px 0;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+  .stats-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(46px, 5vw, 72px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .stats-lbl {
+    font-size: 14px;
+    margin-top: 12px;
+    max-width: 22ch;
+    opacity: .95;
+    line-height: 1.4;
+  }
+  .stats-divider {
+    height: 1px;
+    background: rgba(255,255,255,.25);
+    margin-top: 28px;
+  }
+  @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2,1fr); gap: 32px; } }
+
+  /* ===== QUOTES ===== */
+  .quotes { background: var(--cream); }
+  .quotes-carousel-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+  .quotes-carousel-wrap::before,
+  .quotes-carousel-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .quotes-carousel-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, var(--cream), transparent);
+  }
+  .quotes-carousel-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, var(--cream), transparent);
+  }
+  .quotes-grid {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    padding: 4px 0 20px;
+    animation: marquee-scroll 40s linear infinite;
+  }
+  .quotes-carousel-wrap:hover .quotes-grid { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .quotes-grid { animation: none; } }
+  .qcard {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 46px 28px 28px;
+    flex: 0 0 380px;
+    border: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    position: relative;
+  }
+  .qcard::before {
+    content: "“";
+    font-family: 'Source Serif 4', serif;
+    position: absolute;
+    top: 6px;
+    left: 20px;
+    font-size: 84px;
+    color: var(--orange);
+    line-height: 1;
+    font-weight: 500;
+  }
+  .qcard .body {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-top: 18px;
+    font-style: italic;
+    font-weight: 400;
+    flex-grow: 1;
+  }
+  .qcard .who {
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+  }
+  .qcard .who .name {
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .qcard .who .role {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    font-weight: 500;
+    margin-top: 3px;
+  }
+  .qcard .who .company {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    color: var(--orange-deep);
+    font-size: 17px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  @media (max-width: 900px)  { .qcard { flex: 0 0 calc(50% - 10px); } }
+  @media (max-width: 600px)  { .qcard { flex: 0 0 85%; } }
+
+  /* ===== INDUSTRIVERN + BLOG side-by-side ===== */
+  .twocol {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 24px;
+  }
+  .infocard {
+    border-radius: var(--radius-lg);
+    padding: 48px 44px;
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .infocard.dark { background: #1F1C18; color: #EDE7DB; border-color: transparent; }
+  .infocard.dark .eyebrow { color: var(--aed-accent); }
+  .infocard.dark .eyebrow::before { background: var(--aed-accent); }
+  .infocard.light { background: var(--white); }
+  .infocard h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    line-height: 1.1;
+    margin: 16px 0 14px;
+    max-width: 18ch;
+  }
+  .infocard p { color: var(--ink-2); max-width: 40ch; }
+  .infocard.dark p { color: rgba(255,255,255,.75); }
+  .blog-list {
+    margin-top: 28px;
+    display: grid;
+    gap: 2px;
+  }
+  .blog-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    transition: all .15s;
+  }
+  .blog-item:hover { padding-left: 6px; color: var(--orange-deep); }
+  .blog-item .t { font-weight: 500; }
+  .blog-item .d { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+  @media (max-width: 900px) { .twocol { grid-template-columns: 1fr; } }
+
+  /* ===== CTA ===== */
+  .cta {
+    background: var(--ink);
+    color: white;
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: "";
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(233,116,16,.25) 0%, transparent 60%);
+  }
+  .cta-inner { position: relative; display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; align-items: center; }
+  .cta h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 500;
+    font-size: clamp(42px, 4.5vw, 64px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin: 20px 0 24px;
+  }
+  .cta h2 em { color: var(--orange); font-style: italic; }
+  .cta p { opacity: .8; max-width: 56ch; margin-bottom: 36px; }
+  .cta-form {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: var(--radius-lg);
+    padding: 32px 30px;
+    backdrop-filter: blur(8px);
+  }
+  .cta-form label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: .7;
+    margin: 14px 0 6px;
+  }
+  .cta-form label:first-child { margin-top: 0; }
+  .cta-form input, .cta-form select, .cta-form textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    padding: 8px 0;
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .cta-form input:focus, .cta-form select:focus, .cta-form textarea:focus { border-bottom-color: var(--orange); }
+  .cta-form select option { background: #1a1a1a; color: white; }
+  .cta-form .btn { width: 100%; justify-content: center; margin-top: 28px; }
+  .cta-direct {
+    display: grid;
+    gap: 14px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,.12);
+  }
+  .direct-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-size: 14px;
+  }
+  .direct-row b { font-weight: 600; }
+  .direct-row .icon {
+    width: 34px; height: 34px; border-radius: var(--radius-xs);
+    background: rgba(255,255,255,.08);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  @media (max-width: 900px) { .cta-inner { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #0F0E0D;
+    color: #B8B2A7;
+    padding: 72px 0 32px;
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .foot-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 34ch;
+  }
+  .foot-brand .logo {
+    display: flex; align-items: center; gap: 10px;
+    color: white;
+    font-weight: 700; font-size: 14px;
+    letter-spacing: 0.07em;
+  }
+  .foot-brand .logo img { width: auto; height: 36px; object-fit: contain; }
+  .foot-brand p { font-size: 14px; line-height: 1.55; margin: 0; }
+  .social-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+    transition: background .18s, color .18s;
+  }
+  .social-icon:hover { background: rgba(255,255,255,0.2); color: #fff; }
+  .foot-col h5 {
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: white;
+    margin: 4px 0 18px;
+  }
+  .foot-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .foot-col li a { font-size: 14px; transition: color .12s; }
+  .foot-col li a:hover { color: var(--orange); }
+  .foot-bottom {
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 900px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  /* Animate-in helpers */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.shown { opacity: 1; transform: none; }
+
+  /* Shared filter pill — used by team and FAQ */
+  .team-pill, .faq-pill {
+    background: var(--white); border: 1.5px solid var(--rule);
+    border-radius: var(--radius-pill); padding: 8px 18px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all .18s; color: var(--ink-2);
+  }
+  .team-pill.is-active, .faq-pill.is-active {
+    background: var(--orange-soft); color: var(--orange-deep);
+    border-color: var(--orange-soft);
+  }
+  .team-pill:hover:not(.is-active), .faq-pill:hover:not(.is-active) {
+    border-color: var(--orange); color: var(--orange-deep);
+  }
+
+</style>
+</head>
+<body>
+
+
+<!-- ========== NAV ========== -->
+<header class="nav" id="site-nav">
+  <div class="nav-bar">
+
+    <!-- Logo pill (left) -->
+    <a href="#" class="brand-pill pill-glass" aria-label="Blostrupmoen — til toppen">
+      <img src="assets/logo.png" alt="" class="brand-icon" />
+      <span class="brand-name">BLOSTRUPMOEN</span>
+    </a>
+
+    <!-- Center: nav pill (desktop) + CTA (mobile scrolled) -->
+    <div class="nav-center">
+      <nav class="nav-pill pill-glass" aria-label="Hovedmeny">
+        <a href="#"              class="nav-link is-active" data-spy="hjem">Hjem</a>
+        <a href="#kurs"          class="nav-link" data-spy="kurs">Kurs</a>
+        <a href="#hjertestarter" class="nav-link" data-spy="hjertestarter">Hjertestarter</a>
+        <a href="#utstyr"        class="nav-link" data-spy="utstyr">Utstyr</a>
+        <a href="#industrivern"  class="nav-link" data-spy="radgivning">Rådgivning</a>
+        <a href="#om"            class="nav-link" data-spy="om">Om oss</a>
+      </nav>
+      <a href="#kontakt" class="nav-cta-center pill-glass">Ta kontakt</a>
+    </div>
+
+    <!-- Right: CTA (desktop) + burger (mobile) -->
+    <div class="nav-right">
+      <a href="#kontakt" class="nav-cta-desktop">Ta kontakt</a>
+      <button class="burger-pill pill-glass" aria-label="Åpne meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div class="mobile-menu pill-glass" aria-hidden="true">
+    <a href="#"              class="mob-link is-active" data-spy="hjem">Hjem</a>
+    <a href="#kurs"          class="mob-link">Kurs</a>
+    <a href="#hjertestarter" class="mob-link">Hjertestarter</a>
+    <a href="#utstyr"        class="mob-link">Utstyr</a>
+    <a href="#industrivern"  class="mob-link">Rådgivning</a>
+    <a href="#om"            class="mob-link">Om oss</a>
+    <a href="#kontakt"       class="mob-link mob-link--cta">Ta kontakt</a>
+  </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">B2B Førstehjelp siden 2006</span>
+      <h1>Trygg på <em>hele</em> beredskapen</h1>
+      <p class="hero-lede">
+        Blostrupmoen leverer kurs, hjertestartere og førstehjelpsutstyr til norske bedrifter — på en fullservice-avtale som gjør at du aldri trenger å tenke på batteriskift, elektrodebytte eller utløpsdatoer igjen.
+      </p>
+      <div class="hero-cta">
+        <a href="#kontakt" class="btn btn-primary">Book en befaring <span class="arrow">→</span></a>
+        <a href="#tjenester" class="btn btn-ghost">Se tjenestene</a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="num" data-count-to="11000" data-suffix="+">0+</div>
+          <div class="lbl">Kursdeltakere siden 2006</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="num" data-count-to="2000" data-suffix="+">0+</div>
+          <div class="lbl">Hjertestartere i drift</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="num" data-count-to="98" data-suffix="%" data-plain="true">0%</div>
+          <div class="lbl">Kundetilfredshet</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <img class="primary" src="assets/akuttsekk-open.png" alt="Åpen akuttsekk med hjertestarter" />
+      <div class="floating-logo"><img src="assets/logo.png" alt="" /></div>
+      <div class="hero-badge">
+        <div class="tag">Vår garanti</div>
+        <div class="copy">Hjertestarteren din fungerer — hver dag, i alle år. Eller så bytter vi den.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PARTNERS ========== -->
+<div class="partners">
+  <div class="container partners-row">
+    <div class="partners-label">Betrodd av over 4 000 norske bedrifter og organisasjoner</div>
+    <div class="partners-track-wrap">
+      <div class="partner-logos">
+        <img src="assets/logos/skanska.png"   alt="Skanska"          class="plogo-img">
+        <img src="assets/logos/atea.png"       alt="ATEA"             class="plogo-img">
+        <img src="assets/logos/bertel.png"     alt="Bertel O. Steen"  class="plogo-img">
+        <img src="assets/logos/porsche.svg"    alt="Porsche"          class="plogo-img">
+        <img src="assets/logos/arribatec.png"  alt="Arribatec"        class="plogo-img">
+        <img src="assets/logos/skanska.png"    alt="" aria-hidden="true" class="plogo-img">
+        <img src="assets/logos/atea.png"       alt="" aria-hidden="true" class="plogo-img">
+        <img src="assets/logos/bertel.png"     alt="" aria-hidden="true" class="plogo-img">
+        <img src="assets/logos/porsche.svg"    alt="" aria-hidden="true" class="plogo-img">
+        <img src="assets/logos/arribatec.png"  alt="" aria-hidden="true" class="plogo-img">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SERVICES ========== -->
+<section id="tjenester" style="background: var(--cream);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Tjenestene våre</span>
+      <h2>Vi dekker beredskap fra A til Å.</h2>
+      <p>Kurs, hjertestarter, utstyr og industrivern — hver for seg eller som én helhetlig HMS-avtale. Alt levert av ett sertifisert team, hos deg.</p>
+    </div>
+
+    <div class="services-grid">
+      <a href="#kurs" class="svc">
+        <div class="svc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V6a2 2 0 0 1 2-2h10l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M16 4v4h4"/><path d="M9 14h6M9 11h6M9 17h3"/></svg>
+        </div>
+        <span class="svc-num">01 / Kompetanse</span>
+        <h3>Førstehjelpskurs hos dere</h3>
+        <p>Ni kurstyper fra standard bedrift til EL-bil, fallsikring og livredning. Maks 20 deltakere, 3–5 timer, alltid på deres premisser.</p>
+        <span class="svc-link">Se alle kurs →</span>
+      </a>
+
+      <a href="#hjertestarter" class="svc">
+        <div class="svc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+        </div>
+        <span class="svc-num">02 / Trygghet</span>
+        <h3>Hjertestarter på avtale</h3>
+        <p>Vi eier enheten. Du betaler serviceavtalen. Batterier, elektroder og bytter etter bruk er alltid inkludert — i hele avtaleperioden.</p>
+        <span class="svc-link">Hvordan fungerer det? →</span>
+      </a>
+
+      <a href="#utstyr" class="svc">
+        <div class="svc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M12 11v6M9 14h6"/></svg>
+        </div>
+        <span class="svc-num">03 / Utstyr</span>
+        <h3>Førstehjelpsutstyr &amp; påfyll</h3>
+        <p>Koffert, akuttsekk, brannskadeskrin, plasterdispenser, øyeskyllkabinett og skilt — med gratis påfyll for eksisterende kunder.</p>
+        <span class="svc-link">Se utvalget →</span>
+      </a>
+
+      <a href="#industrivern" class="svc">
+        <div class="svc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <span class="svc-num">04 / Beredskap</span>
+        <h3>Industrivern &amp; HMS</h3>
+        <p>Innsatsledertrening, scenarioøvelser, utstyrsleveranser og befaringer i henhold til NSO-regelverk — for virksomheter med krav.</p>
+        <span class="svc-link">Les mer →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== KURSMODUL ========== -->
+<section id="kurs">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Førstehjelpskurs</span>
+      <h2>Kursene våre er et løfte: når det gjelder, vet ditt team hva de skal gjøre.</h2>
+      <p>Alle kurs holdes hos dere, er bygget etter Norsk Standard og Helsedirektoratets retningslinjer, og tas av instruktører med operativ bakgrunn.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px;" class="course-grid">
+      <!-- courses injected below via CSS grid -->
+    </div>
+  </div>
+</section>
+
+<style>
+  .course-grid .c {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-md);
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all .2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-grid .c:hover { border-color: var(--orange); transform: translateY(-2px); }
+  .course-grid .c .dur {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--orange-deep);
+    text-transform: uppercase;
+  }
+  .course-grid .c h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 4px 0 6px;
+    line-height: 1.2;
+  }
+  .course-grid .c p { font-size: 14px; color: var(--ink-2); margin: 0; line-height: 1.5; }
+  .course-grid .c .tag {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--ink-3);
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+  }
+  @media (max-width:1000px){ .course-grid { grid-template-columns: repeat(2,1fr) !important; } }
+  @media (max-width:600px){ .course-grid { grid-template-columns: 1fr !important; } }
+</style>
+
+<style>
+  .course-grid .expand-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; font-weight: 600; color: var(--orange-deep);
+    padding: 0; margin-top: 14px;
+    transition: color .15s;
+  }
+  .course-grid .expand-toggle:hover { color: var(--orange); }
+  .course-grid .expand-toggle .chev {
+    display: inline-block;
+    transition: transform .25s ease;
+    font-style: normal;
+  }
+  .course-grid .expand-toggle.is-open .chev { transform: rotate(180deg); }
+  .course-grid .course-items {
+    max-height: 0; overflow: hidden;
+    transition: max-height .35s ease;
+    list-style: none; padding: 0; margin: 0;
+  }
+  .course-grid .course-items.is-open { max-height: 400px; }
+  .course-grid .course-items li {
+    font-size: 14px; color: var(--ink-2); padding: 5px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .course-grid .course-items li::before {
+    content: "–"; color: var(--orange); flex-shrink: 0; margin-top: 1px;
+  }
+  .course-grid .course-items li:last-child { border-bottom: none; }
+  .course-grid .course-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--rule);
+  }
+  .course-grid .course-footer .tag { margin-top: 0; padding-top: 0; border-top: none; display: flex; }
+  .course-grid .course-footer .expand-toggle,
+  .course-grid .course-footer .book-link { margin-top: 0; }
+</style>
+<script>
+  const courses = [
+    {dur:"3 timer", name:"Standard bedrift", tag:"Mest bestilte",
+     desc:"Generell førstehjelp på arbeidsplass, HLR og bruk av hjertestarter.",
+     items:["Kvelning/fremmedlegeme i hals, bukstøt","HLR og hjertestarter — praktisk trening","Emosjonell førstehjelp","Varsling ved hendelse","Pasientundersøkelse (ABCDE) og bevissthetsnivå","Frie luftveier og sideleie","Gjenkjenne hjerteinfarkt og hjerneslag","Egen sikkerhet på ulykkessted"]},
+    {dur:"4 timer", name:"Bygg &amp; anlegg", tag:"Sektorspesifikk",
+     desc:"Tilpasset risikoprofil for bygg og anlegg — fallskader, klem, blødninger.",
+     items:["Norsk standard for bygg og anlegg","Lover, forskrifter, HMS, SHA og SJA","Skadestedsledelse og egen sikkerhet","Risikovurdering og fareblindhet","Førstehjelp på bransjerelaterte skader","Varsling — appen 113 og strømulykke","Pasientundersøkelse og sideleie","HLR og hjertestarter — praktisk trening"]},
+    {dur:"5 timer",   name:"Industri",            tag:"Sektorspesifikk", desc:"Kjemiske ulykker, brannskader og klemskader i industrimiljø.",
+     items:["Norske standarder for industri","Lover, regler og direktiver","HMS, FJS og SJA","Risikovurdering","Emosjonell førstehjelp","Industriskadesstatistikk","Menneskelige faktorer og risikoblindhet","Skadestedsledelse og personlig sikkerhet","Sikkerhetsprotokoller og verneutstyr","Krav til medvirkning og arbeidsgivaransvar","Industrespesifikk skadebehandling","Varsling (113-app og strømulykker)","Pasientundersøkelse og sideleie","HLR og hjertestarter — praktisk trening"]},
+    {dur:"3 timer",   name:"Barnehage &amp; skole", tag:"Barnerettet",   desc:"Pediatrisk fokus — allergiske reaksjoner, fremmedlegeme, fall.",
+     items:["Kvelning/fremmedlegeme — bukstøt og magepresses","HLR og hjertestarter (barn og voksen) — praktisk trening","Emosjonell førstehjelp","Varsling ved hendelse","Pasientundersøkelse (ABCDE) og bevissthetsnivå","Frie luftveier og sideleie","Feberkramper og forgiftning","Brannskader og hodeskader","Blødninger og hudavskrapninger","Valgfritt: astma, drukning, allergisk sjokk"]},
+    {dur:"Digitalt",  name:"E-læring",             tag:"Selvstudium",   desc:"Selvstyrt online-versjon som supplement til praktisk kurs."},
+    {dur:"Kombinert", name:"FSE + førstehjelp",    tag:"Sertifisering", desc:"Elsikkerhet kombinert med førstehjelpssertifisering for el-personell."},
+    {dur:"4 timer",   name:"Livredning i vann",    tag:"Sertifisering", desc:"Avsluttende livredderprøve for badeanlegg, strender og aktivitetsentre.",
+     items:["Selvberging og svømming","Alarmplan, ansvar og sikkerhet","Forebygge ulykker","Livredning — teori og praksis","Hjelpemidler/forlenget arm","Stille drukning og sekundær drukning","Pasientundersøkelse","HLR og hjertestarter — praktisk trening","Praktisk trening i vann og DHLR","Dykketeknikk og ilandføring","Livredningsprøve"]},
+    {dur:"4 timer",  name:"Fallsikring",          tag:"Høyrisiko",     desc:"Arbeid i høyden — sertifisert opplæring og redningsøvelser.",
+     items:["Formål og relevante reguleringer","Regler, klassifikasjoner og terminologi","Risikovurdering/SJA","Riktig utvalg og utstyrsbruk","Utstyrsinspeksjon og vedlikehold","Fallforholdsberegninger","Forankringspunktkrav","Fallvernssystemer","Beredskap og redningsplanlegging"]},
+    {dur:"4 timer",   name:"EL-bil sikkerhet",     tag:"Nyeste kurs",   desc:"For mekanikere og elektrikere som jobber med EV og hybrid.",
+     items:["Arbeidsmiljøloven og relevante reguleringer","Ansvarsfordeling arbeidsgiver/ansatt","Ulykkesforebygging og risikovurdering","Arbeidsmetoder og verktøyspesifikasjoner","Batterifare i EV og hybridkjøretøyer","Røykutvikling og brannrisiko","Personlige sikkerhetsprotokoller","Nødrespons og melding","Elektriske skader og strømeksponering","Lavspenningsfarer","Nødstedsprosedyrer","Sirkulasjonssvikt","Høyenergiskader","Bevisstløshet","Praktisk HLR og hjertestarter"]},
+  ];
+  document.addEventListener('DOMContentLoaded', function() {
+    var grid = document.querySelector('.course-grid');
+    if (!grid) return;
+    grid.innerHTML = courses.map(function(c) {
+      var action = c.items
+        ? '<button class="expand-toggle" aria-expanded="false">Se innhold <i class="chev">▾</i></button>'
+        : '<a href="#kontakt" class="expand-toggle book-link" style="text-decoration:none">Book →</a>';
+      var list = c.items
+        ? '<ul class="course-items">' + c.items.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>'
+        : '';
+      return '<div class="c"><div class="dur">' + c.dur + '</div><h4>' + c.name + '</h4><p>' + c.desc + '</p>' +
+             '<div class="course-footer"><div class="tag">● ' + c.tag + '</div>' + action + '</div>' + list + '</div>';
+    }).join('');
+
+    grid.addEventListener('click', function(e) {
+      var btn = e.target.closest('.expand-toggle[aria-expanded]');
+      if (!btn) return;
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      btn.classList.toggle('is-open', !open);
+      var list = btn.closest('.c').querySelector('.course-items');
+      if (list) list.classList.toggle('is-open', !open);
+    });
+  });
+</script>
+
+<!-- ========== AED FEATURE ========== -->
+<section class="aed" id="hjertestarter">
+  <div class="container aed-grid">
+    <div>
+      <span class="eyebrow">Hjertestarter på serviceavtale</span>
+      <h2>Vær trygg på at det <em>alltid virker</em> — når det teller.</h2>
+      <p class="aed-lede">
+        En hjertestarter som står ubrukt i tre år og har utgåtte batterier, redder ingen liv. Vi snudde modellen: vi eier enheten, du betaler serviceavtalen. Resten er vårt ansvar.
+      </p>
+
+      <ul class="aed-list">
+        <li>
+          <div class="bullet"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><b>Vi bytter batteriene før de går ut</b> — alltid, uten at du trenger å si fra.</div>
+        </li>
+        <li>
+          <div class="bullet"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><b>Elektrodene byttes før utløp</b> — både voksen- og barneelektroder.</div>
+        </li>
+        <li>
+          <div class="bullet"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><b>Brukt i en hendelse?</b> Vi bytter hele enheten gratis, innen 24 timer. <span class="dim">Du betaler aldri for reparasjon eller erstatning.</span></div>
+        </li>
+        <li>
+          <div class="bullet"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><b>Merkene Mediana og Cardia</b> — CE-merket, norsk tilpasset. Enhetsverdi 8 500–40 000 NOK. Du betaler aldri for selve apparatet.</div>
+        </li>
+        <li>
+          <div class="bullet"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><b>Skap, skilt og plassering</b> — befaring inkludert. Vi monterer der det redder flest liv.</div>
+        </li>
+      </ul>
+
+      <a href="#kontakt" class="btn btn-orange">Få et tilbud <span class="arrow">→</span></a>
+    </div>
+
+    <div class="aed-visual">
+      <img src="assets/cardia-wall.jpg" alt="Cardia hjertestarter montert på vegg" />
+      <div class="aed-stat">
+        <div>
+          <div class="num">2 000+</div>
+          <div class="lbl">enheter i drift<br/>over hele Norge</div>
+        </div>
+        <div>
+          <div class="num">24t</div>
+          <div class="lbl">maks byttetid<br/>etter en hendelse</div>
+        </div>
+        <div>
+          <div class="num">0,-</div>
+          <div class="lbl">for batteri, bytte<br/>eller erstatning</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== EQUIPMENT ========== -->
+<section class="equipment" id="utstyr">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Førstehjelpsutstyr</span>
+      <h2>Arbeidstilsynet-godkjent utstyr. Gratis påfyll så lenge du er kunde.</h2>
+      <p>Vi leverer det komplette sortimentet av førstehjelpsutstyr til norske arbeidsplasser — og fyller på det som brukes opp.</p>
+    </div>
+
+    <div class="eq-grid">
+      <div class="eq eq-1">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/akuttsekk-open.png" alt="Åpen akuttsekk"/></div>
+        <div class="eq-label">Akuttsekk med hjertestarter <small>Holder førstehjelpskoffert + AED i én enhet</small></div>
+      </div>
+      <div class="eq eq-2">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/forstehjelpskoffert.png" alt="Stor førstehjelpskoffert"/></div>
+        <div class="eq-label">Stor førstehjelpskoffert <small>30+ artikler, kompatibel med Arbeidstilsynets krav</small></div>
+      </div>
+      <div class="eq eq-3">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/brannskadeskrin.png" alt="Brannskadeskrin"/></div>
+        <div class="eq-label">Brannskadeskrin <small>Hydrogeler, kompresser, spesialbandasjer</small></div>
+      </div>
+      <div class="eq eq-4">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/plasterdispenser.jpg" alt="Plasterdispenser" style="max-height:80%; mix-blend-mode:multiply"/></div>
+        <div class="eq-label">Plasterdispenser</div>
+      </div>
+      <div class="eq eq-5">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/mediana-aed.png" alt="Mediana AED"/></div>
+        <div class="eq-label">Mediana hjertestarter <small>CE-merket. På serviceavtale.</small></div>
+      </div>
+      <div class="eq eq-6" style="background:#EFE4CF">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/akuttsekk-closed.png" alt="Akuttsekk lukket"/></div>
+        <div class="eq-label">Akuttsekk (lukket)</div>
+      </div>
+      <div class="eq eq-7" style="background:#F6ECDA">
+        <span class="stock-badge"><span class="stock-dot"></span>På lager</span>
+        <div class="eq-img"><img src="assets/cutout.png" alt="Komplett pakke"/></div>
+        <div class="eq-label">Komplett innhold <small>Ser du noe som mangler? Vi fyller på.</small></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap:12px; flex-wrap: wrap;">
+      <a href="#kontakt" class="btn btn-primary">Bestill befaring <span class="arrow">→</span></a>
+      <a href="#" class="btn btn-ghost">Logg inn for å bestille påfyll</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<div class="stats">
+  <div class="container stats-grid">
+    <div>
+      <div class="stats-num" data-count-to="1000" data-suffix="+">0+</div>
+      <div class="stats-lbl">Kurs gjennomført i året, hos kunder i hele Norge</div>
+    </div>
+    <div>
+      <div class="stats-num" data-count-to="11000" data-suffix="+">0+</div>
+      <div class="stats-lbl">Kursdeltakere har lært førstehjelp hos oss siden 2006</div>
+    </div>
+    <div>
+      <div class="stats-num" data-count-to="2000" data-suffix="+">0+</div>
+      <div class="stats-lbl">Hjertestartere i aktiv drift, med full serviceavtale</div>
+    </div>
+    <div>
+      <div class="stats-num" data-count-to="98" data-suffix="%">0%</div>
+      <div class="stats-lbl">Kundetilfredshet basert på tilbakemelding etter kurs</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== QUOTES ========== -->
+<section class="quotes" id="referanser">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Kundene våre sier</span>
+      <h2>Fornøyde kunder over hele Norge</h2>
+    </div>
+
+    <div class="quotes-carousel-wrap">
+    <div class="quotes-grid" id="quotes-carousel">
+      <div class="qcard">
+        <p class="body">Vi er meget fornøyde med kurset! Informativt og gøy. Fått flere tilbakemeldinger fra deltakere om at dette var det beste kurset de hadde vært med på hittil, god bruk av humor som engasjerte deltakerne på en god måte, og gjorde at stoffet ble «lettere å huske». Veldig fint med praktisk HLR med bruk av hjertestarter, det hadde de fleste av oss ikke testet før. 10/10 fra vår side!</p>
+        <div class="who">
+          <div class="name">Simen Skramstad Johnsen</div>
+          <div class="role">Site Reliability Engineer</div>
+          <div class="company">Arribatec</div>
+        </div>
+      </div>
+
+      <div class="qcard">
+        <p class="body">Tusen takk for et meget bra kurs. Jeg er veldig imponert over måten dere gjennomførte kurset på, og hvor godt dere holdt oppmerksomheten til kursdeltakerne i hele perioden. Veldig bra gjennomført! Mange fikk seg en «tankevekker», og gode læringer med underveis.</p>
+        <div class="who">
+          <div class="name">Per Kristian Eide</div>
+          <div class="role">Konsulentleder AV &amp; Velferd</div>
+          <div class="company">Atea AS</div>
+        </div>
+      </div>
+
+      <div class="qcard">
+        <p class="body">Innhold, kursleder, bruk av eksempler på diverse hendelser, involveringer osv, var meget bra. Takket være kompetanse, innlevelse, humor og tilstedeværelse fra kurslederen gikk disse timene veldig fort og innholdet ble interessant. Jeg har selv deltatt på flere kurs med livredding som tema, dette var helt soleklart det beste.</p>
+        <div class="who">
+          <div class="name">Lasse Eriksen</div>
+          <div class="role">Leder Forretningsutvikling</div>
+          <div class="company">Porsche Center Oslo</div>
+        </div>
+      </div>
+
+      <div class="qcard">
+        <p class="body">Instruktørene fra Blostrupmoen leverte opplæringen på en imponerende måte — de er både varme, engasjerte og profesjonelle, og klarer å skape et trygt og motiverende læringsmiljø. Vi opplever samarbeidet med Blostrupmoen som svært positivt, og vi setter stor pris på deres fleksibilitet, kvalitet og genuine engasjement for å gjøre lærlingene best mulig rustet for arbeidslivet.</p>
+        <div class="who">
+          <div class="name">Kim Bonde</div>
+          <div class="role">Leder</div>
+          <div class="company">Bertel O. Steen Akademiet</div>
+        </div>
+      </div>
+      <!-- duplicate track for seamless loop -->
+      <div class="qcard" aria-hidden="true">
+        <p class="body">Vi er meget fornøyde med kurset! Informativt og gøy. Fått flere tilbakemeldinger fra deltakere om at dette var det beste kurset de hadde vært med på hittil, god bruk av humor som engasjerte deltakerne på en god måte, og gjorde at stoffet ble «lettere å huske». Veldig fint med praktisk HLR med bruk av hjertestarter, det hadde de fleste av oss ikke testet før. 10/10 fra vår side!</p>
+        <div class="who"><div class="name">Simen Skramstad Johnsen</div><div class="role">Site Reliability Engineer</div><div class="company">Arribatec</div></div>
+      </div>
+      <div class="qcard" aria-hidden="true">
+        <p class="body">Tusen takk for et meget bra kurs. Jeg er veldig imponert over måten dere gjennomførte kurset på, og hvor godt dere holdt oppmerksomheten til kursdeltakerne i hele perioden. Veldig bra gjennomført! Mange fikk seg en «tankevekker», og gode læringer med underveis.</p>
+        <div class="who"><div class="name">Per Kristian Eide</div><div class="role">Konsulentleder AV &amp; Velferd</div><div class="company">Atea AS</div></div>
+      </div>
+      <div class="qcard" aria-hidden="true">
+        <p class="body">Innhold, kursleder, bruk av eksempler på diverse hendelser, involveringer osv, var meget bra. Takket være kompetanse, innlevelse, humor og tilstedeværelse fra kurslederen gikk disse timene veldig fort og innholdet ble interessant. Jeg har selv deltatt på flere kurs med livredning som tema, dette var helt soleklart det beste.</p>
+        <div class="who"><div class="name">Lasse Eriksen</div><div class="role">Leder Forretningsutvikling</div><div class="company">Porsche Center Oslo</div></div>
+      </div>
+      <div class="qcard" aria-hidden="true">
+        <p class="body">Instruktørene fra Blostrupmoen leverte opplæringen på en imponerende måte — de er både varme, engasjerte og profesjonelle, og klarer å skape et trygt og motiverende læringsmiljø. Vi opplever samarbeidet med Blostrupmoen som svært positivt, og vi setter stor pris på deres fleksibilitet, kvalitet og genuine engasjement for å gjøre lærlingene best mulig rustet for arbeidslivet.</p>
+        <div class="who"><div class="name">Kim Bonde</div><div class="role">Leder</div><div class="company">Bertel O. Steen Akademiet</div></div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== INDUSTRIVERN + BLOG ========== -->
+<section id="industrivern">
+  <div class="container">
+    <div class="twocol">
+      <div class="infocard dark">
+        <div>
+          <span class="eyebrow">Industrivern</span>
+          <h3>Når loven stiller krav, leverer vi fullpakken.</h3>
+          <p>For virksomheter underlagt NSO-regelverket leverer vi innsatsledertrening, scenariotilpassede øvelser, utstyr og vedlikehold — og vi gjennomfører befaring hos dere for å tilpasse programmet til risikobildet.</p>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="#kontakt" class="btn btn-orange">Bestill befaring <span class="arrow">→</span></a>
+          <a href="#" class="btn btn-ghost" style="color:white; border-color: rgba(255,255,255,.3)">Les om NSO-krav</a>
+        </div>
+      </div>
+
+      <div class="infocard light" id="blogg">
+        <div>
+          <span class="eyebrow">Hjertebloggen</span>
+          <h3>Kunnskap, fritt tilgjengelig.</h3>
+          <p>Praktiske artikler om HLR, hjertestarterbruk, sesonghazarder og HMS-lovgivning — skrevet av instruktørene våre.</p>
+        </div>
+        <div class="blog-list">
+          <a href="#" class="blog-item"><span class="t">Når starter du HLR — og når slutter du?</span><span class="d">Mars 2026</span></a>
+          <a href="#" class="blog-item"><span class="t">Flåttbitt i sommer: det du bør vite</span><span class="d">Mai 2025</span></a>
+          <a href="#" class="blog-item"><span class="t">Slik kjenner du igjen hjerneslag (FAST)</span><span class="d">April 2025</span></a>
+          <a href="#" class="blog-item"><span class="t">Førstehjelp i påskefjellet</span><span class="d">Mars 2025</span></a>
+          <a href="#" class="blog-item"><span class="t">Hjertestarter: lov, krav og plassering</span><span class="d">Februar 2025</span></a>
+        </div>
+        <a href="#" class="btn btn-ghost" style="margin-top:18px; align-self: flex-start;">Alle artikler →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STORY ========== -->
+<section class="story" id="om">
+  <div class="container story-grid">
+    <div>
+      <span class="eyebrow">Historien vår</span>
+      <p class="story-pull" style="margin-top:18px;">
+        Det hele begynte da Lars Håkon Blostrupmoens far <em>overlevde hjertestans</em> — fordi noen i nærheten visste hva de skulle gjøre.
+      </p>
+    </div>
+    <div class="story-body">
+      <p>
+        I 2006 grunnla Lars Håkon Blostrupmoen selskapet med ett mål: å gjøre norske arbeidsplasser trygge nok til at flere skal ha sjansen hans far fikk. Tjue år senere holder vi fortsatt på samme prinsipp — at god førstehjelp ikke er en boks i et skap, men kunnskap i hendene og hjertestartere som fungerer.
+      </p>
+      <p>
+        Vi jobber etter Norsk Standard og Helsedirektoratets retningslinjer, kommer alltid ut til kunden, og tar den administrative byrden bort fra HMS-ansvarlige og verneombud. Du skal kunne glemme førstehjelp — fordi vi husker det for deg.
+      </p>
+      <div class="founder-card">
+        <div class="founder-av">LH</div>
+        <div>
+          <div class="name">Lars Håkon Blostrupmoen</div>
+          <div class="role">Grunnlegger &amp; daglig leder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TEAM ========== -->
+<section id="team">
+  <div class="container">
+    <div class="team-hero-head">
+      <h2 class="team-headline">Teamet vårt er her <span class="team-float-frame"><img class="team-float-img" src="assets/team/stian.jpg" alt="" aria-hidden="true"/></span> for din bedrift</h2>
+    </div>
+
+    <div class="team-filters" role="group" aria-label="Filtrer teamet">
+      <button class="team-pill is-active" data-group="Alle">Alle</button>
+      <button class="team-pill" data-group="Kundekontakter">Kundekontakter</button>
+      <button class="team-pill" data-group="Instruktører">Instruktører</button>
+      <button class="team-pill" data-group="Administrasjon">Administrasjon</button>
+    </div>
+
+    <div class="team-grid" id="team-grid"></div>
+    <div style="text-align:center; margin-top: 32px;">
+      <button class="btn btn-ghost" id="team-expand-btn">Vis hele teamet (25) →</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  #team { background: var(--cream); }
+  .team-hero-head { text-align: center; margin-bottom: 36px; }
+  .team-headline {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 500; line-height: 1.2;
+    display: inline-flex; align-items: center; flex-wrap: wrap;
+    gap: 16px; justify-content: center;
+  }
+  .team-float-frame {
+    display: inline-flex;
+    width: 80px; height: 80px;
+    border-radius: var(--radius-md); overflow: hidden;
+    flex-shrink: 0;
+    background: var(--cream-deep);
+    animation: float-bob 3s ease-in-out infinite;
+    box-shadow: 0 8px 24px rgba(20,19,17,.15);
+  }
+  @media (prefers-reduced-motion: reduce) { .team-float-frame { animation: none; } }
+  @keyframes float-bob {
+    0%, 100% { transform: rotate(7deg) translateY(0); }
+    50%       { transform: rotate(7deg) translateY(-10px); }
+  }
+  .team-float-img { width: 100%; height: 100%; object-fit: cover; }
+  .team-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 1000px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px)  { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+  .tcard {
+    position: relative; border-radius: 14px; overflow: hidden;
+    background: white;
+    transition: transform .2s;
+  }
+  .tcard:hover { transform: translateY(-3px); }
+  .tcard.is-hidden { display: none; }
+  .tcard.is-collapsed { display: none; }
+  .tcard-photo {
+    aspect-ratio: 1; position: relative; overflow: hidden;
+    border-radius: 14px; background: var(--cream);
+  }
+  .tcard-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .tcard-photo.is-placeholder { background: white; display: flex; align-items: center; justify-content: center; }
+  .tcard-photo.is-placeholder img { width: 45%; height: 45%; object-fit: contain; opacity: 1; }
+  .tcard-hover {
+    position: absolute; inset: 0;
+    background: var(--overlay-dark);
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    opacity: 0; transition: opacity .2s;
+    border-radius: 14px;
+  }
+  .tcard:hover .tcard-hover { opacity: 1; }
+  .tcard-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--glass-white-heavy); color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, transform .15s;
+    text-decoration: none;
+  }
+  .tcard-btn:hover { background: white; transform: scale(1.08); }
+  .tcard-label {
+    background: var(--glass-bg);
+    backdrop-filter: blur(6px);
+    padding: 8px 12px;
+    border-radius: 0 0 14px 14px;
+    margin-top: -2px;
+  }
+  .tcard-name { font-weight: 700; font-size: 14px; color: var(--ink); line-height: 1.2; }
+  .tcard-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3); margin-top: 2px;
+  }
+</style>
+
+<script>
+(function () {
+  var SHOW_INITIAL = 8;
+  var teamMembers = [
+    // Kundekontakter
+    {g:"Kundekontakter", name:"Gunn Marit Stenvoll",        title:"Operativ leder",              phone:"97990231", email:"gms@blostrupmoen.no", photo:"assets/team/gunn-marit.jpg"},
+    {g:"Kundekontakter", name:"Heidi Kristensen Jødahl",    title:"KAM & HMS-konsulent",         phone:"97990236", email:"hkj@blostrupmoen.no", photo:"assets/team/heidi.jpg"},
+    {g:"Kundekontakter", name:"Joe Fredrik Hjelle",         title:"Servicesjef",                 phone:"97990247", email:"jfh@blostrupmoen.no", photo:null},
+    {g:"Kundekontakter", name:"Tine Engebretsen",           title:"Servicekoordinator",          phone:"97990240", email:"te@blostrupmoen.no",  photo:"assets/team/tine.jpg"},
+    {g:"Kundekontakter", name:"Tuva Andersen Abello",       title:"Senior salgsrådgiver",        phone:"97435283", email:"taa@blostrupmoen.no", photo:null},
+    {g:"Kundekontakter", name:"Jørn Gilberg",               title:"Salgsrådgiver",               phone:"41372200", email:"jg@blostrupmoen.no",  photo:"assets/team/jorn.jpg"},
+    {g:"Kundekontakter", name:"Fredrik Heyerdahl-Slettemark",title:"Salgsrådgiver",              phone:"46792948", email:"fhs@blostrupmoen.no", photo:"assets/team/fredrik.jpg"},
+    {g:"Kundekontakter", name:"Kjerstin Halmø Vestby",      title:"Salgsrådgiver",               phone:"97675934", email:"khv@blostrupmoen.no", photo:"assets/team/kjerstin.jpg"},
+    {g:"Kundekontakter", name:"Jan Ove Gabrielsen",         title:"Salgsrådgiver",               phone:"90104105", email:"jog@blostrupmoen.no", photo:"assets/team/jan-ove.jpg"},
+    {g:"Kundekontakter", name:"Ole-Martin Johansen",        title:"Servicetekniker",             phone:"92080740", email:"omj@blostrupmoen.no", photo:"assets/team/ole-martin.jpg"},
+    {g:"Kundekontakter", name:"Håkon Selmer",               title:"Servicetekniker",             phone:"90532576", email:"has@blostrupmoen.no", photo:"assets/team/hakon.jpg"},
+    // Instruktører
+    {g:"Instruktører",   name:"Jón Björn Ófeigsson",        title:"Seniorinstruktør",            phone:"97990241", email:"jbo@blostrupmoen.no", photo:"assets/team/jon-bjorn.jpg"},
+    {g:"Instruktører",   name:"Daniel Donborn",             title:"Seniorinstruktør",            phone:"92253229", email:"dd@blostrupmoen.no",  photo:"assets/team/daniel.jpg"},
+    {g:"Instruktører",   name:"Håvard Solstad",             title:"Seniorinstruktør & fagansvarlig", phone:"99272780", email:"hs@blostrupmoen.no",  photo:"assets/team/havard.jpg"},
+    {g:"Instruktører",   name:"Bjørn Erik Bringslid",       title:"Seniorinstruktør",            phone:"97990235", email:"beb@blostrupmoen.no", photo:"assets/team/bjorn-erik.jpg"},
+    {g:"Instruktører",   name:"Hilde Hessen Aarvik",        title:"Instruktør & servicekoordinator", phone:"97990260", email:"hh@blostrupmoen.no",  photo:"assets/team/hilde.jpg"},
+    {g:"Instruktører",   name:"Øyvind Lehre",               title:"Seniorinstruktør",            phone:"90614603", email:"ol@blostrupmoen.no",  photo:"assets/team/oyvind.jpg"},
+    {g:"Instruktører",   name:"Jonas Flink",                title:"Seniorinstruktør & fagansvarlig", phone:"95222887", email:"jf@blostrupmoen.no",  photo:"assets/team/jonas.jpg"},
+    {g:"Instruktører",   name:"Julie Kristiansen",          title:"Instruktør",                  phone:"41246468", email:"jk@blostrupmoen.no",  photo:null},
+    {g:"Instruktører",   name:"Daniel Lucas Sehota",        title:"Instruktør",                  phone:"90178713", email:"dls@blostrupmoen.no", photo:"assets/team/daniel-l.jpg"},
+    // Administrasjon
+    {g:"Administrasjon", name:"Stian Botten Olsen",         title:"Daglig leder",                phone:"93411418", email:"sbo@blostrupmoen.no", photo:"assets/team/stian.jpg"},
+    {g:"Administrasjon", name:"Nina Selmer",                title:"Økonomidirektør",             phone:"97990281", email:"ncs@blostrupmoen.no", photo:"assets/team/nina.jpg"},
+    {g:"Administrasjon", name:"Hans Georg Selmer",          title:"Produkt- og IT-ansvarlig",    phone:"97990280", email:"hgs@blostrupmoen.no", photo:"assets/team/hans-georg.jpg"},
+    {g:"Administrasjon", name:"Silje Solem",                title:"Administrasjonssekretær",     phone:"97990284", email:"ss@blostrupmoen.no",  photo:"assets/team/silje.jpg"},
+    {g:"Administrasjon", name:"Ann-Jeanette B. Larsen",     title:"Markedssjef",                 phone:"90554689", email:"ajb@blostrupmoen.no", photo:"assets/team/ann-jeanette.jpg"},
+  ];
+
+  var grid = document.getElementById('team-grid');
+  var expandBtn = document.getElementById('team-expand-btn');
+  var expanded = false;
+  var activeFilter = 'Alle';
+
+  var floatImages = teamMembers.filter(function(m){ return m.photo; }).map(function(m){ return m.photo; });
+  var floatIdx = 0;
+  var floatImg = document.querySelector('.team-float-img');
+  if (floatImg && floatImages.length > 1) {
+    setInterval(function() {
+      floatIdx = (floatIdx + 1) % floatImages.length;
+      floatImg.src = floatImages[floatIdx];
+    }, 1800);
+  }
+
+  function phoneDisplay(p) {
+    return p.replace(/(\d{3})(\d{2})(\d{3})/, '$1 $2 $3');
+  }
+
+  var SVG_PHONE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12.72 19.79 19.79 0 0 1 1.06 4.1 2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+  var SVG_MAIL = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>';
+
+  function renderCard(m, idx) {
+    var photoClass = m.photo ? 'tcard-photo' : 'tcard-photo is-placeholder';
+    var photoSrc = m.photo ? m.photo : 'assets/favicon-192.png';
+    var hoverHtml = '<div class="tcard-hover">' +
+      '<a href="tel:+47' + m.phone + '" class="tcard-btn" title="Ring ' + m.name + '">' + SVG_PHONE + '</a>' +
+      '<a href="mailto:' + m.email + '" class="tcard-btn" title="Send e-post til ' + m.name + '">' + SVG_MAIL + '</a>' +
+      '</div>';
+    return '<div class="tcard" data-group="' + m.g + '" data-idx="' + idx + '">' +
+      '<div class="' + photoClass + '">' +
+        '<img src="' + photoSrc + '" alt="' + m.name + '" loading="lazy"/>' +
+        hoverHtml +
+      '</div>' +
+      '<div class="tcard-label">' +
+        '<div class="tcard-name">' + m.name + '</div>' +
+        '<div class="tcard-title">' + m.title + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function applyFilter() {
+    var groupIndices = [];
+    teamMembers.forEach(function(m, i) {
+      if (activeFilter === 'Alle' || m.g === activeFilter) groupIndices.push(i);
+    });
+    grid.querySelectorAll('.tcard').forEach(function(card) {
+      var idx = parseInt(card.dataset.idx, 10);
+      var posInGroup = groupIndices.indexOf(idx);
+      var matchesFilter = posInGroup >= 0;
+      var show = matchesFilter && (expanded || posInGroup < SHOW_INITIAL);
+      card.classList.toggle('is-hidden', !show);
+    });
+    if (expandBtn) {
+      var total = groupIndices.length;
+      expandBtn.style.display = (!expanded && total > SHOW_INITIAL) ? '' : 'none';
+      expandBtn.textContent = 'Vis hele teamet (' + total + ') →';
+    }
+  }
+
+  if (grid) {
+    grid.innerHTML = teamMembers.map(renderCard).join('');
+    applyFilter();
+  }
+
+  document.querySelectorAll('.team-pill').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.team-pill').forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      activeFilter = btn.dataset.group;
+      expanded = false;
+      applyFilter();
+    });
+  });
+
+  if (expandBtn) {
+    expandBtn.addEventListener('click', function() {
+      expanded = true;
+      applyFilter();
+    });
+  }
+})();
+</script>
+
+<!-- ========== FAQ ========== -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Vanlige spørsmål (FAQ)</span>
+      <h2>Svar på det du lurer på</h2>
+    </div>
+    <div class="faq-filters" role="group" aria-label="Filtrer spørsmål">
+      <button class="faq-pill is-active" data-filter="Alle">Alle</button>
+      <button class="faq-pill" data-filter="Kurs">Kurs</button>
+      <button class="faq-pill" data-filter="Hjertestarter">Hjertestarter</button>
+      <button class="faq-pill" data-filter="Utstyr">Utstyr</button>
+    </div>
+    <div class="faq-list" id="faq-list"></div>
+    <div style="text-align:center; margin-top: 32px;">
+      <button class="btn btn-ghost" id="faq-expand-btn">Vis flere spørsmål →</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  #faq { background: var(--bg); }
+  .faq-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 32px; }
+  .faq-item { border-bottom: 1px solid var(--rule); }
+  .faq-item.is-hidden { display: none; }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; padding: 20px 0; cursor: pointer;
+    font-weight: 600; font-size: 17px; color: var(--ink);
+  }
+  .faq-q .faq-chev {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--cream); display: flex; align-items: center; justify-content: center;
+    font-size: 12px; transition: transform .25s ease, background .18s;
+  }
+  .faq-item.is-open .faq-chev { transform: rotate(180deg); background: var(--orange-soft); color: var(--orange-deep); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height .35s ease, padding .35s ease;
+    color: var(--ink-2); line-height: 1.6;
+    padding: 0;
+  }
+  .faq-item.is-open .faq-a { max-height: 400px; padding-bottom: 20px; }
+</style>
+
+<script>
+(function () {
+  var SHOW_INITIAL = 6;
+  var expanded = false;
+  var activeFilter = 'Alle';
+  var faqs = [
+    // --- KURS ---
+    {t:"Kurs", q:"Hva er førstehjelp?", a:"Førstehjelp er omsorg eller livreddende hjelp ved en akutt hendelse eller skade, som blir gitt av mennesker i umiddelbar nærhet av den det måtte gjelde. Førstehjelp foregår i de første minuttene etter at skaden eller hendelsen finner sted."},
+    {t:"Kurs", q:"Hvem kan bruke en hjertestarter?", a:"Alle kan bruke en hjertestarter. Den vil fortelle deg hva du må gjøre, og tegningene på elektrodene viser hva du skal gjøre. En hjertestarter vil bare gi støt om det er nødvendig — den kan ikke gi støt til et hjerte som slår normalt."},
+    {t:"Kurs", q:"Hvor lenge bør et førstehjelpskurs vare?", a:"Våre grunnleggende førstehjelpskurs varer i 3 timer for maks 20 personer. Om kundens risikoanalyse tilsier det, varer kurset lenger."},
+    {t:"Kurs", q:"Hva bør man kunne av førstehjelp?", a:"Man bør som et minimum kunne hjerte- og lungeredning, bruke en hjertestarter, stoppe en blødning og gjenkjenne symptomer på alvorlig sykdom."},
+    {t:"Kurs", q:"Hvordan tilrettelegges et førstehjelpskurs?", a:"Vi har et tett samarbeid med kundene våre både før, under og etter kurs. Derfor kan vi skreddersy kurs og legge til temaer og treninger som passer deres risikovurdering."},
+    {t:"Kurs", q:"Hva skal et førstehjelpskurs inneholde?", a:"I følge de nye norske standardene fra Helsedirektoratet skal et kurs inneholde: frie luftveier, sideleie, ABCDE-undersøkelse, HLR og hjertestarter, blødningsstans, sjokk, bevisstløshet, brannskader og forgiftning."},
+    {t:"Kurs", q:"Hva har de nye norske standardene å si for kursene?", a:"Blostrupmoen har oppdatert alle kursene i henhold til de norske standardene fra Helsedirektoratet, og laget egne tilpassede kurs for bygg og anlegg, industri og bilbransjen."},
+    {t:"Kurs", q:"Hvordan foregår trening på HLR og hjertestarter på kurs?", a:"På alle fysiske kurs trener vi i grupper på HLR og bruk av hjertestarter. Deltakerne settes i et rollespill der de kommer til en bevisstløs person som trenger akutt hjelp. Fysiske hindringer håndteres med tilrettelagte løsninger."},
+    {t:"Kurs", q:"Går instruktøren igjennom førstehjelpsutstyret på kurset?", a:"Ja — instruktøren ber alltid om å få se tilgjengelig førstehjelpsutstyr og går igjennom bruken. Instruktørene gir råd om hva som mangler iht. krav fra Arbeidstilsynet."},
+    {t:"Kurs", q:"Hvor ofte bør man trene på førstehjelp?", a:"Arbeidstilsynet anbefaler regelmessig trening med 1–1,5 års mellomrom. Blostrupmoen hjelper med påminnelser og booking slik at intervallet overholdes."},
+    {t:"Kurs", q:"Hva gjør Blostrupmoen annerledes enn andre kursleverandører?", a:"Vi tar det fulle ansvaret og hjelper kundene med booking, organisering, påfyll av førstehjelpsutstyr og operative hjertestartere. Noen av kundene våre har hatt kurs med oss i over 15 år på rad."},
+    {t:"Kurs", q:"Kan man kombinere FSE-kurs med førstehjelpskurs?", a:"Ja — vårt FSE + førstehjelp-kurs kombinerer elsikkerhet med førstehjelpssertifisering for el-personell. Kurset varer 4–6 timer avhengig av nivå."},
+    // --- UTSTYR ---
+    {t:"Utstyr", q:"Hva bør inkluderes i et førstehjelpsskrin?", a:"Et førstehjelpsskrin bør inneholde: sårrens, sårsalve, plaster, bandasjer, kompress, øyeskyll, sterile kompress, brannskadesalve, isposer og engangshansker, samt pinsett og saks."},
+    {t:"Utstyr", q:"Må alle bedrifter ha førstehjelpsutstyr?", a:"Ja, alle bedrifter må ha førstehjelpsutstyr tilpasset risikoen i sin bedrift, iht. Arbeidstilsynets krav."},
+    {t:"Utstyr", q:"Hvem har ansvar for at arbeidsplassen har førstehjelpsutstyr?", a:"Arbeidsgiver har ansvaret for innkjøp, vedlikehold og at ansatte vet hvor utstyret er og hvordan det brukes. Arbeidsgiver skal tilpasse utstyret ut fra risikovurdering, størrelse og antall ansatte."},
+    {t:"Utstyr", q:"Sjekkliste — hva skal et førstehjelpsskrin inneholde?", a:"Enkeltmannspakke, gasbind, pressblokk, sårstrips, tekstilplaster, sårkompress, sårvask, brannskadebandasje, brannskadesalve, sårrenseserviett, engangshansker, saks, pinsett, redningsfolie og munn-til-munn-maske."},
+    {t:"Utstyr", q:"Hvor mye førstehjelpsutstyr bør man ha?", a:"Arbeidsgiver vurderer mengde ut fra risikovurderingen. Arbeidsplasser med lang transporttid til medisinsk hjelp bør ha mer. Blostrupmoen kan bistå med befaring og anbefaling."},
+    {t:"Utstyr", q:"Hvor mange førstehjelpsskrin trenger en bedrift?", a:"Det avhenger av størrelsen og oppsettet til virksomheten. Er bedriften spredt over et større område, bør det i tillegg til faste stasjoner finnes lett transportable akuttsekker."},
+    {t:"Utstyr", q:"Bør man skifte ut førstehjelpsutstyr — går det ut på dato?", a:"Ja. Arbeidsgiver skal ha rutiner som sikrer at innholdet alltid er oppdatert og innenfor utløpsdato. Mange komponenter har begrenset holdbarhet."},
+    {t:"Utstyr", q:"Kan man få hjelp til påfyll av førstehjelpsutstyr?", a:"Ja — Blostrupmoen tilbyr påfyllingsavtaler med en fast månedlig sum som inkluderer fritt påfyll av alt utstyr til enhver tid, automatisk bytte av utløpte varer og direkte levering til arbeidsplassen."},
+    {t:"Utstyr", q:"Hva sier Arbeidstilsynet om hjertestarter på arbeidsplassen?", a:"«Om verksemda avgjer å ha ein hjertestartar tilgjengeleg, til dømes på bakgrunn av ei risikovurdering, bør det etablerast rutinar for bruk, vedlikehald og opplæring.»"},
+    {t:"Utstyr", q:"Må alle bedrifter ha båre tilgjengelig?", a:"I bedrifter med høy risiko for skader bør man ha en båre tilgjengelig."},
+    {t:"Utstyr", q:"Hva kreves ved fare for giftstoffer eller etsende stoffer?", a:"Førstehjelpsutstyret skal tilrettelegges i henhold til risiko. Er det fare for etsende stoffer i øynene, er øyeskyllstasjon særlig viktig. Giftige stoffer krever antidot — sjekk sikkerhetsblad."},
+    {t:"Utstyr", q:"Hva sier kravet om sikkerhetsblad?", a:"Arbeidsgiver skal sørge for at bedriften har et stoffarkiv med sikkerhetsblad lett tilgjengelig. Produsenten skal opplyse om førstehjelp ved eksponering."},
+    {t:"Utstyr", q:"Hvordan bruker man førstehjelpsutstyret riktig?", a:"Blostrupmoen tilbyr kurs der instruktørene gjennomgår alt tilgjengelig utstyr og forklarer bruken. De gir råd om hva som mangler eller er utdatert."},
+    // --- HJERTESTARTER ---
+    {t:"Hjertestarter", q:"Hva er en hjertestarter?", a:"En hjertestarter er et apparat som kan gi støt gjennom hjertet ved hjertestans, ved hjelp av to elektroder. Den er også kalt defibrillator."},
+    {t:"Hjertestarter", q:"Hva gjør en hjertestarter?", a:"En hjertestarter stanser en unormal hjerterytme og gir hjertet muligheten til å starte på nytt, ved å gi ett eller flere strømstøt."},
+    {t:"Hjertestarter", q:"Hvordan bruker man en hjertestarter?", a:"Åpne hjertestarteren og fest elektrodene som vist. Er det mye kroppshår, barber der elektrodene skal sitte. Apparatet analyserer hjerterytmen og forteller deg hva du skal gjøre — det vil kun gi støt om det er nødvendig."},
+    {t:"Hjertestarter", q:"Er hjertestarter påbudt?", a:"En hjertestarter er ikke lovpålagt, men anbefalt av Arbeidstilsynet: «Hjartestartar bør vere tilgjengeleg i alle verksemder. Det er enkelt å sette seg inn i bruken, og alle på arbeidsplassen bør få opplæring.»"},
+    {t:"Hjertestarter", q:"Finnes det krav om hjertestarter på arbeidsplassen?", a:"Det stilles ikke formelt krav om hjertestarter, men det stilles krav til adekvat førstehjelpsutstyr. Hjertestarter er anbefalt førstehjelpsutstyr av Arbeidstilsynet."},
+    {t:"Hjertestarter", q:"Hvem er best i test?", a:"De fleste hjertestartere har de samme egenskapene. Blostrupmoen låner ut hjertestartere med serviceavtale som sikrer at den alltid er operativ med gyldig batteri og elektroder."},
+    {t:"Hjertestarter", q:"Hva koster en hjertestarter?", a:"En hjertestarter koster fra 8 500 til 40 000 kr avhengig av merke. Med en leieavtale fra Blostrupmoen betaler du aldri for selve apparatet — kun serviceavtalen."},
+    {t:"Hjertestarter", q:"Hvordan foregår leie av hjertestarter?", a:"Du får en hjertestarter på utlån. Blostrupmoens serviceteknikere tar service minst én gang per år og bytter elektroder og batteri før utløp. Brukt i en hendelse byttes den ut gratis innen 24 timer."},
+    {t:"Hjertestarter", q:"Hva koster batteri til hjertestarter?", a:"Batteri koster fra 500 til 7 500 kr avhengig av modell. Med serviceavtale fra Blostrupmoen er batteribytte alltid inkludert."},
+    {t:"Hjertestarter", q:"Hva koster elektroder til hjertestarter?", a:"Elektroder koster fra 500 til 3 000 kr. De er merket med utløpsdato — limet og kontaktgelen svekkes over tid. Med serviceavtale bytter Blostrupmoen dem automatisk."},
+    {t:"Hjertestarter", q:"Hvor ofte må batteri og elektroder byttes?", a:"Batterilevetid varierer fra 2–7 år avhengig av modell. Elektroder byttes iht. utløpsdato. Med serviceavtale fra Blostrupmoen skjer dette automatisk — du trenger ikke følge med selv."},
+    {t:"Hjertestarter", q:"Hvor ofte skal hjertestarteren kontrolleres?", a:"Blostrupmoen tar service minst én gang i året. I tillegg bør du jevnlig sjekke at den ikke er rødkrysset og at batteri og elektroder er innenfor dato."},
+    {t:"Hjertestarter", q:"Hvordan sjekke hjertestarteren selv?", a:"Sjekk at den ikke er rødkrysset, og at batteri og elektroder er godt innenfor utløpsdato. Du kan starte maskinen én gang i året — den tester seg selv og sier fra om noe er galt."},
+    {t:"Hjertestarter", q:"Kan hjertestarteren henge ute?", a:"Den kan henge ute over 0°C. Under frysepunktet bør den beskyttes — varmeskap kan kjøpes til formålet."},
+    {t:"Hjertestarter", q:"Tåler hjertestarteren kulde?", a:"Batterier fungerer dårlig i minusgrader. En hjertestarter som har stått kaldt, må varmes opp før bruk. Denne type oppbevaring svekker også batterilevetiden."},
+    {t:"Hjertestarter", q:"Kan en hjertestarter gi støt når den ikke skal?", a:"Nei. Hjertestarteren måler hjerterytmen og kan ikke gi støt til et hjerte som slår normalt."},
+    {t:"Hjertestarter", q:"Hvor kan jeg kjøpe en hjertestarter?", a:"Det finnes mange tilbydere. Sørg for at du enkelt kan få tak i batteri og elektroder til modellen du velger. Alternativt: lei fra Blostrupmoen der alt er inkludert i en fast månedlig kostnad."},
+    {t:"Hjertestarter", q:"Hvordan registrere hjertestarteren i hjertestarterregisteret?", a:"Registrer gratis på 113.no. Det offentlige registeret har oversikt over alle registrerte hjertestartere i Norge — tilgjengelig via appen Hjelp 113. Velg det offentlige registeret, ikke private aktørers."},
+    {t:"Hjertestarter", q:"Hvor finner jeg nærmeste hjertestarter?", a:"Bruk appen Hjelp 113 eller 113.no — der finner du alle registrerte hjertestartere i nærheten. Registrer din egen hjertestarter gratis slik at andre kan finne den."},
+  ];
+
+  var list = document.getElementById('faq-list');
+  var expandBtn = document.getElementById('faq-expand-btn');
+  if (!list) return;
+
+  function renderFaq(f, i) {
+    return '<div class="faq-item" data-topic="' + f.t + '" data-idx="' + i + '">' +
+      '<div class="faq-q" role="button" tabindex="0" aria-expanded="false">' +
+        '<span>' + f.q + '</span>' +
+        '<span class="faq-chev">▾</span>' +
+      '</div>' +
+      '<div class="faq-a">' + f.a + '</div>' +
+    '</div>';
+  }
+
+  function applyFaqFilter() {
+    var groupIndices = [];
+    faqs.forEach(function(f, i) {
+      if (activeFilter === 'Alle' || f.t === activeFilter) groupIndices.push(i);
+    });
+
+    list.querySelectorAll('.faq-item').forEach(function(item) {
+      var idx = parseInt(item.dataset.idx, 10);
+      var posInGroup = groupIndices.indexOf(idx);
+      var matchesFilter = posInGroup >= 0;
+      var show = matchesFilter && (expanded || posInGroup < SHOW_INITIAL);
+      item.classList.toggle('is-hidden', !show);
+    });
+
+    if (expandBtn) {
+      var total = groupIndices.length;
+      expandBtn.style.display = (!expanded && total > SHOW_INITIAL) ? '' : 'none';
+      expandBtn.textContent = 'Vis flere spørsmål (' + (total - SHOW_INITIAL) + ') →';
+    }
+  }
+
+  list.innerHTML = faqs.map(renderFaq).join('');
+  applyFaqFilter();
+
+  list.addEventListener('click', function(e) {
+    var q = e.target.closest('.faq-q');
+    if (!q) return;
+    var item = q.parentElement;
+    var open = item.classList.contains('is-open');
+    list.querySelectorAll('.faq-item.is-open').forEach(function(i) {
+      i.classList.remove('is-open');
+      i.querySelector('.faq-q').setAttribute('aria-expanded','false');
+    });
+    if (!open) {
+      item.classList.add('is-open');
+      q.setAttribute('aria-expanded','true');
+    }
+  });
+
+  document.querySelectorAll('.faq-pill').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.faq-pill').forEach(function(b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      activeFilter = btn.dataset.filter;
+      expanded = false;
+      applyFaqFilter();
+    });
+  });
+
+  if (expandBtn) {
+    expandBtn.addEventListener('click', function() {
+      expanded = true;
+      applyFaqFilter();
+    });
+  }
+})();
+</script>
+
+<!-- ========== CTA ========== -->
+<section class="cta" id="kontakt">
+  <div class="container cta-inner">
+    <div>
+      <span class="eyebrow" style="color:#F9A76B;">Kom i gang</span>
+      <h2><em>Gratis befaring,</em> tilpasset tilbud innen en uke.</h2>
+      <p>En av instruktørene våre kommer ut til dere, kartlegger behov, finner riktig plassering for hjertestarter og foreslår en helhetlig avtale. Uforpliktende.</p>
+
+      <div class="cta-direct">
+        <div class="direct-row">
+          <div class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          </div>
+          <div><b>23 23 37 00</b> &nbsp;· hverdager 08–16</div>
+        </div>
+        <div class="direct-row">
+          <div class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+          </div>
+          <div><b>post@blostrupmoen.no</b></div>
+        </div>
+        <div class="direct-row">
+          <div class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>Besøksadresse: Brobekkveien 80, 0582 Oslo</div>
+        </div>
+      </div>
+    </div>
+
+    <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Takk! Vi tar kontakt innen 24t ✓'; this.querySelector('button').disabled=true;">
+      <label>Bedrift</label>
+      <input type="text" placeholder="Firmanavn" required />
+
+      <label>Kontaktperson</label>
+      <input type="text" placeholder="Fornavn Etternavn" required />
+
+      <label>E-post</label>
+      <input type="email" placeholder="navn@bedrift.no" required />
+
+      <label>Telefon</label>
+      <input type="tel" placeholder="+47 ..." />
+
+      <label>Jeg er interessert i</label>
+      <select>
+        <option>Førstehjelpskurs</option>
+        <option>Hjertestarter på avtale</option>
+        <option>Førstehjelpsutstyr &amp; påfyll</option>
+        <option>Industrivern &amp; HMS</option>
+        <option>Helhetlig avtale (alt over)</option>
+      </select>
+
+      <button type="submit" class="btn btn-orange">Be om tilbud <span class="arrow">→</span></button>
+    </form>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo"><img src="assets/logo.png" alt=""/> BLOSTRUPMOEN</div>
+        <p>B2B-leverandør av førstehjelpskurs, hjertestartere og førstehjelpsutstyr til norske bedrifter siden 2006.</p>
+        <p style="margin-top:4px;">Org.nr 990 XXX XXX · Medlem av NHO Service og Handel</p>
+      </div>
+      <div class="foot-col">
+        <h5>Tjenester</h5>
+        <ul>
+          <li><a href="#kurs">Førstehjelpskurs</a></li>
+          <li><a href="#hjertestarter">Hjertestarter</a></li>
+          <li><a href="#utstyr">Utstyr &amp; påfyll</a></li>
+          <li><a href="#industrivern">Industrivern</a></li>
+          <li><a href="#blogg">Hjertebloggen</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Kurstyper</h5>
+        <ul>
+          <li><a href="#">Standard bedrift</a></li>
+          <li><a href="#">Bygg &amp; anlegg</a></li>
+          <li><a href="#">Industri</a></li>
+          <li><a href="#">Barnehage &amp; skole</a></li>
+          <li><a href="#">EL-bil sikkerhet</a></li>
+          <li><a href="#">FSE-sertifisering</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Kontakt</h5>
+        <ul>
+          <li>23 23 37 00</li>
+          <li>post@blostrupmoen.no</li>
+          <li>Brobekkveien 80<br/>0582 Oslo</li>
+          <li style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+            <a href="https://www.facebook.com/blostrupmoen" target="_blank" rel="noopener" class="social-icon" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/blostrupmoen" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/blostrupmoen-norge-as" target="_blank" rel="noopener" class="social-icon" aria-label="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@blostrupmoen" target="_blank" rel="noopener" class="social-icon" aria-label="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Blostrupmoen Norge AS — Kunnskap redder liv.</div>
+      <div><a href="#">Personvern</a> &nbsp;·&nbsp; <a href="#">Vilkår</a> &nbsp;·&nbsp; <a href="#">Cookies</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('section, .partners, .stats').forEach(el => {
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+</script>
+
+<script>
+/* ===== FLOATING NAV ===== */
+(function () {
+  const nav    = document.getElementById('site-nav');
+  const links  = document.querySelectorAll('.nav-link[data-spy]');
+  const burger = document.querySelector('.burger-pill');
+  const mMenu  = document.querySelector('.mobile-menu');
+
+  /* Scroll → .is-scrolled toggle (rAF-throttled) */
+  let ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      requestAnimationFrame(function () {
+        nav.classList.toggle('is-scrolled', window.scrollY > 60);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  /* Scroll spy */
+  const spySections = [
+    { id: 'kurs',           spy: 'kurs' },
+    { id: 'hjertestarter',  spy: 'hjertestarter' },
+    { id: 'utstyr',         spy: 'utstyr' },
+    { id: 'industrivern',   spy: 'radgivning' },
+    { id: 'om',             spy: 'om' },
+  ];
+
+  function setActive(spy) {
+    links.forEach(function (l) {
+      l.classList.toggle('is-active', l.dataset.spy === spy);
+    });
+    document.querySelectorAll('.mob-link[data-spy]').forEach(function (l) {
+      l.classList.toggle('is-active', l.dataset.spy === spy);
+    });
+  }
+
+  var spyIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var match = spySections.find(function (s) { return s.id === e.target.id; });
+        if (match) setActive(match.spy);
+      }
+    });
+  }, { threshold: 0.25, rootMargin: '-72px 0px -35% 0px' });
+
+  spySections.forEach(function (s) {
+    var el = document.getElementById(s.id);
+    if (el) spyIO.observe(el);
+  });
+
+  /* Hero in view → Hjem active */
+  var heroEl = document.querySelector('.hero');
+  if (heroEl) {
+    new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) setActive('hjem');
+    }, { threshold: 0.1 }).observe(heroEl);
+  }
+
+  /* Burger toggle */
+  if (burger && mMenu) {
+    burger.addEventListener('click', function () {
+      var opening = mMenu.getAttribute('aria-hidden') === 'true';
+      mMenu.setAttribute('aria-hidden', opening ? 'false' : 'true');
+      mMenu.classList.toggle('is-open', opening);
+      burger.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      burger.classList.toggle('is-open', opening);
+    });
+    mMenu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        mMenu.setAttribute('aria-hidden', 'true');
+        mMenu.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.classList.remove('is-open');
+      });
+    });
+  }
+})();
+</script>
+
+<script>
+/* ===== STATS COUNT-UP ===== */
+(function () {
+  var nums = document.querySelectorAll('.stats-num[data-count-to], .num[data-count-to]');
+  if (!nums.length) return;
+
+  function formatNum(n) {
+    return Math.round(n).toLocaleString('no');
+  }
+
+  function animateCount(el) {
+    var target  = parseInt(el.dataset.countTo, 10);
+    var suffix  = el.dataset.suffix || '';
+    var dur     = 1800;
+    var start   = null;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = (target >= 1000 ? Math.round(target / 1000).toLocaleString('no') + ' 000' : target) + suffix;
+      return;
+    }
+
+    function tick(ts) {
+      if (!start) start = ts;
+      var pct  = Math.min((ts - start) / dur, 1);
+      var ease = 1 - Math.pow(1 - pct, 3);
+      el.textContent = formatNum(target * ease) + suffix;
+      if (pct < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  var statsIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        animateCount(e.target);
+        statsIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  nums.forEach(function (el) { statsIO.observe(el); });
+})();
+
+</script>
+</body>
+</html>
